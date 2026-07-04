@@ -17,7 +17,7 @@
       pointer-events: none;
     }
 
-    /* ===== ГОЛОВНЕ ВІКНО (МЕНШЕ + ЗЛІВА) ===== */
+    /* ===== ГОЛОВНЕ ВІКНО ===== */
     .launcher {
       position: fixed;
       bottom: 50px;
@@ -25,46 +25,86 @@
       width: 320px;
       padding: 18px 22px 22px 22px;
 
-      background: rgba(8, 8, 28, 0.7);
-      backdrop-filter: blur(24px) saturate(200%);
-      -webkit-backdrop-filter: blur(24px) saturate(200%);
+      /* ===== ОСНОВНИЙ СКЛЯНИЙ ЕФЕКТ ===== */
+      background: rgba(10, 10, 35, 0.45);
+      backdrop-filter: blur(28px) saturate(250%);
+      -webkit-backdrop-filter: blur(28px) saturate(250%);
 
-      border-radius: 28px;
-      border: 1.5px solid rgba(0, 212, 255, 0.25);
-      box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.6),
-        0 0 40px rgba(0, 212, 255, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      border-radius: 28px 28px 28px 28px;
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(0, 180, 255, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
       pointer-events: auto;
       cursor: default;
-      transition: box-shadow 0.4s ease;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      
+      position: relative;
+      overflow: hidden;
     }
 
-    .launcher:hover {
-      box-shadow:
-        0 25px 70px rgba(0, 0, 0, 0.7),
-        0 0 60px rgba(0, 212, 255, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    .launcher::before {
+      content: '';
+      position: absolute;
+      top: -150%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.03) 30%,
+        rgba(255, 255, 255, 0.08) 45%,
+        rgba(255, 255, 255, 0.12) 50%,
+        rgba(255, 255, 255, 0.08) 55%,
+        rgba(255, 255, 255, 0.03) 70%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: rotate(25deg);
+      pointer-events: none;
+      animation: shimmer 6s ease-in-out infinite;
     }
 
-    /* ===== ВЕРХНЯ ПАНЕЛЬ ===== */
+    .launcher::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(to top, rgba(0,180,255,0.03), transparent);
+      pointer-events: none;
+      border-radius: 0 0 28px 28px;
+    }
+
+    @keyframes shimmer {
+      0% { transform: rotate(25deg) translateX(-100%) translateY(-100%); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: rotate(25deg) translateX(100%) translateY(100%); opacity: 0; }
+    }
+
+    .launcher.hidden {
+      opacity: 0;
+      transform: scale(0.9) translateY(20px);
+      pointer-events: none;
+    }
+
     .drag-area {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding-bottom: 12px;
-      border-bottom: 1px solid rgba(255,255,255,.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
       cursor: grab;
       pointer-events: auto;
-      user-select: none;
     }
 
-    .drag-area:active {
-      cursor: grabbing;
-    }
+    .drag-area:active { cursor: grabbing; }
 
-    .drag-area .title {
+    .title {
       font-size: 18px;
       font-weight: 800;
       letter-spacing: 1.5px;
@@ -75,18 +115,15 @@
       animation: gradientMove 4s ease-in-out infinite;
     }
 
-    .drag-area .badge {
+    .badge {
       font-size: 10px;
       padding: 2px 12px;
       border-radius: 30px;
-      background: rgba(0,212,255,.1);
-      border: 1px solid rgba(0,212,255,.15);
-      color: rgba(0,212,255,.6);
-      letter-spacing: 1px;
-      font-weight: 600;
+      background: rgba(0,212,255,0.06);
+      border: 1px solid rgba(0,212,255,0.08);
+      color: rgba(0,212,255,0.4);
     }
 
-    /* ===== КНОПКИ ===== */
     .game-list {
       display: flex;
       flex-direction: column;
@@ -98,46 +135,18 @@
       display: flex;
       align-items: center;
       padding: 10px 16px;
-      background: rgba(255,255,255,.02);
-      border: 1px solid rgba(255,255,255,.04);
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.03);
       border-radius: 18px;
-      cursor: pointer;
-      transition: .3s;
       text-decoration: none;
       color: white;
-      position: relative;
-      overflow: hidden;
+      transition: .3s;
       pointer-events: auto;
     }
 
-    .game-btn::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 18px;
-      padding: 1px;
-      background: linear-gradient(135deg,rgba(0,212,255,0),rgba(168,85,247,0));
-      -webkit-mask: linear-gradient(#fff 0 0) content-box,
-                    linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      transition: .5s;
-    }
-
-    .game-btn:hover::before {
-      background: linear-gradient(135deg,
-      rgba(0,212,255,.3),
-      rgba(168,85,247,.3));
-    }
-
     .game-btn:hover {
-      background: rgba(0,212,255,.06);
+      background: rgba(0,180,255,0.04);
       transform: translateX(4px) scale(1.01);
-      border-color: rgba(0,212,255,.15);
-    }
-
-    .game-btn:active {
-      transform: scale(.97) translateX(2px);
     }
 
     .game-icon {
@@ -147,80 +156,48 @@
       text-align: center;
     }
 
-    .game-info {
-      flex: 1;
-    }
-
-    .game-name {
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-    .game-desc {
-      font-size: 11px;
-      color: rgba(255,255,255,.3);
-      margin-top: 1px;
-    }
+    .game-name { font-size: 15px; font-weight: 700; }
+    .game-desc { font-size: 11px; color: rgba(255,255,255,0.2); }
 
     .game-status {
       font-size: 11px;
       padding: 3px 14px;
       border-radius: 30px;
-      background: rgba(0,255,100,.1);
-      color: #4ade80;
-      border: 1px solid rgba(0,255,100,.1);
-      font-weight: 700;
+      background: rgba(0,255,100,0.04);
+      color: rgba(74,222,128,0.5);
     }
 
     .status-offline {
-      background: rgba(255,50,50,.06);
-      color: rgba(255,100,100,.5);
-      border-color: rgba(255,50,50,.06);
+      background: rgba(255,50,50,0.03);
+      color: rgba(255,100,100,0.3);
     }
 
     .footer {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       margin-top: 14px;
       padding-top: 12px;
-      border-top: 1px solid rgba(255,255,255,.03);
+      border-top: 1px solid rgba(255,255,255,0.02);
     }
 
     .footer-text {
-      color: rgba(255,255,255,.12);
       font-size: 10px;
-      letter-spacing: 2px;
+      color: rgba(255,255,255,0.06);
     }
 
     .close-btn {
-      background: rgba(255,50,50,.05);
-      border: 1px solid rgba(255,50,50,.08);
-      color: rgba(255,100,100,.4);
       padding: 4px 16px;
       border-radius: 30px;
+      border: 1px solid rgba(255,50,50,0.04);
+      background: rgba(255,50,50,0.03);
+      color: rgba(255,100,100,0.3);
       cursor: pointer;
-      transition: .3s;
-      pointer-events: auto;
-    }
-
-    .close-btn:hover {
-      background: rgba(255,50,50,.15);
-      color: rgba(255,100,100,.8);
     }
 
     @keyframes gradientMove {
       0% {background-position:0% 50%;}
       50% {background-position:100% 50%;}
       100% {background-position:0% 50%;}
-    }
-
-    @media (max-width:600px) {
-      .launcher {
-        width:270px;
-        left:15px;
-        bottom:30px;
-      }
     }
   </style>
 </head>
@@ -235,84 +212,68 @@
   </div>
 
   <div class="game-list">
-
-    <a class="game-btn"
-       href="https://www.roblox.com/games/142823291/Murder-Mystery-2"
-       target="_blank">
+    <a class="game-btn" href="https://www.roblox.com/games/142823291/Murder-Mystery-2" target="_blank">
       <span class="game-icon">🔪</span>
-
       <div class="game-info">
         <div class="game-name">Murder Mystery 2</div>
         <div class="game-desc">Детектив • 10M+ гравців</div>
       </div>
-
       <span class="game-status">▶ Грати</span>
     </a>
 
-    <div class="game-btn" style="opacity:.4;cursor:not-allowed;">
+    <div class="game-btn" style="opacity:0.4;cursor:not-allowed;">
       <span class="game-icon">❓</span>
-
       <div class="game-info">
         <div class="game-name">Невідома гра</div>
         <div class="game-desc">Скоро буде додано...</div>
       </div>
-
       <span class="game-status status-offline">⚡ Скоро</span>
     </div>
-
-    <div class="game-btn" style="opacity:.4;cursor:not-allowed;">
-      <span class="game-icon">❓</span>
-
-      <div class="game-info">
-        <div class="game-name">Невідома гра</div>
-        <div class="game-desc">Скоро буде додано...</div>
-      </div>
-
-      <span class="game-status status-offline">⚡ Скоро</span>
-    </div>
-
   </div>
 
   <div class="footer">
     <span class="footer-text">✦ LAUNCHER</span>
-
-    <button class="close-btn"
-      onclick="document.getElementById('launcher').style.display='none'">
-      ✕ Закрити
-    </button>
+    <button class="close-btn" onclick="document.getElementById('launcher').style.display='none'">✕ Закрити</button>
   </div>
 
 </div>
 
 <script>
-const launcher = document.getElementById("launcher");
-const dragHandle = document.getElementById("dragHandle");
+let launcher = document.getElementById('launcher');
+let dragHandle = document.getElementById('dragHandle');
 
 let isDragging = false;
 let offsetX = 0;
 let offsetY = 0;
 
-dragHandle.addEventListener("mousedown", (e) => {
+function toggleLauncher(){
+  launcher.classList.toggle('hidden');
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.code === 'ShiftRight') {
+    e.preventDefault();
+    toggleLauncher();
+  }
+});
+
+dragHandle.addEventListener('mousedown', (e) => {
   isDragging = true;
   const rect = launcher.getBoundingClientRect();
   offsetX = e.clientX - rect.left;
   offsetY = e.clientY - rect.top;
-  launcher.style.cursor = "grabbing";
-  e.preventDefault();
 });
 
-document.addEventListener("mousemove", (e) => {
+document.addEventListener('mousemove', (e) => {
   if (!isDragging) return;
-
-  launcher.style.left = (e.clientX - offsetX) + "px";
-  launcher.style.top = (e.clientY - offsetY) + "px";
-  launcher.style.bottom = "auto";
-  launcher.style.transform = "none";
+  launcher.style.left = (e.clientX - offsetX) + 'px';
+  launcher.style.top = (e.clientY - offsetY) + 'px';
+  launcher.style.bottom = 'auto';
+  launcher.style.transform = 'none';
 });
 
-document.addEventListener("mouseup", () => {
+document.addEventListener('mouseup', () => {
   isDragging = false;
-  launcher.style.cursor = "default";
 });
 </script>
 
