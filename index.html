@@ -11,186 +11,215 @@
 
     body {
       background: transparent;
-      font-family: 'Segoe UI', Arial, sans-serif;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
       user-select: none;
-      pointer-events: none;
       overflow: hidden;
+      pointer-events: none;
     }
 
+    /* ===== ГОЛОВНЕ ВІКНО (МЕНШЕ + ЗЛІВА) ===== */
     .launcher {
       position: fixed;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 420px;
-      padding: 30px 35px 35px;
+      bottom: 50px;
+      left: 30px;
+      width: 320px;
+      padding: 18px 22px 22px 22px;
 
-      background: rgba(10,10,30,.75);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      background: rgba(8, 8, 28, 0.7);
+      backdrop-filter: blur(24px) saturate(200%);
+      -webkit-backdrop-filter: blur(24px) saturate(200%);
 
-      border: 2px solid rgba(0,212,255,.3);
-      border-radius: 50px;
-      box-shadow: 0 0 60px rgba(0,212,255,.15);
+      border-radius: 28px;
+      border: 1.5px solid rgba(0, 212, 255, 0.25);
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.6),
+        0 0 40px rgba(0, 212, 255, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
 
-      animation: floatGlow 4s ease-in-out infinite;
+      pointer-events: auto;
+      cursor: default;
+      transition: box-shadow 0.4s ease;
+    }
+
+    .launcher:hover {
+      box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.7),
+        0 0 60px rgba(0, 212, 255, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    /* ===== ВЕРХНЯ ПАНЕЛЬ ===== */
+    .drag-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      cursor: grab;
+      pointer-events: auto;
+      user-select: none;
+    }
+
+    .drag-area:active {
+      cursor: grabbing;
+    }
+
+    .drag-area .title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      background: linear-gradient(135deg,#00d4ff,#a855f7,#00d4ff);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientMove 4s ease-in-out infinite;
+    }
+
+    .drag-area .badge {
+      font-size: 10px;
+      padding: 2px 12px;
+      border-radius: 30px;
+      background: rgba(0,212,255,.1);
+      border: 1px solid rgba(0,212,255,.15);
+      color: rgba(0,212,255,.6);
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    /* ===== КНОПКИ ===== */
+    .game-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .game-btn {
+      display: flex;
+      align-items: center;
+      padding: 10px 16px;
+      background: rgba(255,255,255,.02);
+      border: 1px solid rgba(255,255,255,.04);
+      border-radius: 18px;
+      cursor: pointer;
+      transition: .3s;
+      text-decoration: none;
+      color: white;
+      position: relative;
+      overflow: hidden;
       pointer-events: auto;
     }
 
-    .title{
-      text-align:center;
-      font-size:30px;
-      font-weight:900;
-      letter-spacing:2px;
-      margin-bottom:20px;
-
-      background:linear-gradient(135deg,#00d4ff,#a855f7,#00d4ff);
-      background-size:200% 200%;
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      animation:gradientMove 4s ease infinite;
+    .game-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      padding: 1px;
+      background: linear-gradient(135deg,rgba(0,212,255,0),rgba(168,85,247,0));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box,
+                    linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      transition: .5s;
     }
 
-    .subtitle{
-      text-align:center;
-      color:rgba(255,255,255,.3);
-      font-size:13px;
-      letter-spacing:3px;
-      margin-bottom:20px;
-      text-transform:uppercase;
+    .game-btn:hover::before {
+      background: linear-gradient(135deg,
+      rgba(0,212,255,.3),
+      rgba(168,85,247,.3));
     }
 
-    .game-list{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
+    .game-btn:hover {
+      background: rgba(0,212,255,.06);
+      transform: translateX(4px) scale(1.01);
+      border-color: rgba(0,212,255,.15);
     }
 
-    .game-btn{
-      display:flex;
-      align-items:center;
-      padding:14px 22px;
-      border-radius:30px;
-
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.06);
-
-      color:#fff;
-      text-decoration:none;
-
-      transition:.3s;
-      pointer-events:auto;
+    .game-btn:active {
+      transform: scale(.97) translateX(2px);
     }
 
-    .game-btn:hover{
-      background:rgba(0,212,255,.1);
-      border-color:rgba(0,212,255,.3);
-      transform:scale(1.02);
-      box-shadow:0 0 30px rgba(0,212,255,.1);
+    .game-icon {
+      font-size: 24px;
+      margin-right: 14px;
+      min-width: 36px;
+      text-align: center;
     }
 
-    .game-btn:active{
-      transform:scale(.97);
+    .game-info {
+      flex: 1;
     }
 
-    .game-icon{
-      font-size:32px;
-      margin-right:18px;
-      min-width:45px;
-      text-align:center;
+    .game-name {
+      font-size: 15px;
+      font-weight: 700;
     }
 
-    .game-info{
-      flex:1;
+    .game-desc {
+      font-size: 11px;
+      color: rgba(255,255,255,.3);
+      margin-top: 1px;
     }
 
-    .game-name{
-      font-size:18px;
-      font-weight:700;
+    .game-status {
+      font-size: 11px;
+      padding: 3px 14px;
+      border-radius: 30px;
+      background: rgba(0,255,100,.1);
+      color: #4ade80;
+      border: 1px solid rgba(0,255,100,.1);
+      font-weight: 700;
     }
 
-    .game-desc{
-      margin-top:2px;
-      font-size:13px;
-      color:rgba(255,255,255,.4);
+    .status-offline {
+      background: rgba(255,50,50,.06);
+      color: rgba(255,100,100,.5);
+      border-color: rgba(255,50,50,.06);
     }
 
-    .game-status{
-      padding:4px 14px;
-      border-radius:20px;
-      font-size:12px;
-      font-weight:600;
-
-      color:#4ade80;
-      background:rgba(0,255,100,.15);
-      border:1px solid rgba(0,255,100,.2);
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,.03);
     }
 
-    .status-offline{
-      color:#f87171;
-      background:rgba(255,50,50,.1);
-      border-color:rgba(255,50,50,.2);
+    .footer-text {
+      color: rgba(255,255,255,.12);
+      font-size: 10px;
+      letter-spacing: 2px;
     }
 
-    .footer{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-top:20px;
-      padding-top:15px;
-      border-top:1px solid rgba(255,255,255,.05);
+    .close-btn {
+      background: rgba(255,50,50,.05);
+      border: 1px solid rgba(255,50,50,.08);
+      color: rgba(255,100,100,.4);
+      padding: 4px 16px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: .3s;
+      pointer-events: auto;
     }
 
-    .footer-text{
-      font-size:12px;
-      color:rgba(255,255,255,.2);
+    .close-btn:hover {
+      background: rgba(255,50,50,.15);
+      color: rgba(255,100,100,.8);
     }
 
-    .close-btn{
-      padding:6px 18px;
-      border:none;
-      border-radius:20px;
-      cursor:pointer;
-
-      color:#f87171;
-      background:rgba(255,50,50,.1);
-      border:1px solid rgba(255,50,50,.2);
-
-      transition:.3s;
-      pointer-events:auto;
+    @keyframes gradientMove {
+      0% {background-position:0% 50%;}
+      50% {background-position:100% 50%;}
+      100% {background-position:0% 50%;}
     }
 
-    .close-btn:hover{
-      background:rgba(255,50,50,.2);
-    }
-
-    @keyframes floatGlow{
-      0%,100%{
-        transform:translateX(-50%) translateY(0);
-        box-shadow:0 0 40px rgba(0,212,255,.1);
-      }
-      50%{
-        transform:translateX(-50%) translateY(-5px);
-        box-shadow:0 0 70px rgba(0,212,255,.2);
-      }
-    }
-
-    @keyframes gradientMove{
-      0%{background-position:0% 50%;}
-      50%{background-position:100% 50%;}
-      100%{background-position:0% 50%;}
-    }
-
-    @media(max-width:500px){
-      .launcher{
-        width:90%;
-        padding:25px 20px;
-        border-radius:35px;
-        bottom:40px;
-      }
-
-      .title{
-        font-size:24px;
+    @media (max-width:600px) {
+      .launcher {
+        width:270px;
+        left:15px;
+        bottom:30px;
       }
     }
   </style>
@@ -198,31 +227,29 @@
 
 <body>
 
-<div class="launcher">
+<div class="launcher" id="launcher">
 
-  <div class="title">✦ PULSE LAUNCHER ✦</div>
-  <div class="subtitle">▼ Вибір гри ▼</div>
+  <div class="drag-area" id="dragHandle">
+    <span class="title">✦ PULSE</span>
+    <span class="badge">v2.0</span>
+  </div>
 
   <div class="game-list">
 
     <a class="game-btn"
        href="https://www.roblox.com/games/142823291/Murder-Mystery-2"
        target="_blank">
-
       <span class="game-icon">🔪</span>
 
       <div class="game-info">
         <div class="game-name">Murder Mystery 2</div>
-        <div class="game-desc">
-          Класичний детектив • 10M+ гравців
-        </div>
+        <div class="game-desc">Детектив • 10M+ гравців</div>
       </div>
 
       <span class="game-status">▶ Грати</span>
-
     </a>
 
-    <div class="game-btn" style="opacity:.5;cursor:not-allowed;">
+    <div class="game-btn" style="opacity:.4;cursor:not-allowed;">
       <span class="game-icon">❓</span>
 
       <div class="game-info">
@@ -233,7 +260,7 @@
       <span class="game-status status-offline">⚡ Скоро</span>
     </div>
 
-    <div class="game-btn" style="opacity:.5;cursor:not-allowed;">
+    <div class="game-btn" style="opacity:.4;cursor:not-allowed;">
       <span class="game-icon">❓</span>
 
       <div class="game-info">
@@ -247,15 +274,47 @@
   </div>
 
   <div class="footer">
-    <span class="footer-text">✦ PULSE v1.0</span>
+    <span class="footer-text">✦ LAUNCHER</span>
 
     <button class="close-btn"
-      onclick="this.closest('.launcher').style.display='none'">
+      onclick="document.getElementById('launcher').style.display='none'">
       ✕ Закрити
     </button>
   </div>
 
 </div>
+
+<script>
+const launcher = document.getElementById("launcher");
+const dragHandle = document.getElementById("dragHandle");
+
+let isDragging = false;
+let offsetX = 0;
+let offsetY = 0;
+
+dragHandle.addEventListener("mousedown", (e) => {
+  isDragging = true;
+  const rect = launcher.getBoundingClientRect();
+  offsetX = e.clientX - rect.left;
+  offsetY = e.clientY - rect.top;
+  launcher.style.cursor = "grabbing";
+  e.preventDefault();
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (!isDragging) return;
+
+  launcher.style.left = (e.clientX - offsetX) + "px";
+  launcher.style.top = (e.clientY - offsetY) + "px";
+  launcher.style.bottom = "auto";
+  launcher.style.transform = "none";
+});
+
+document.addEventListener("mouseup", () => {
+  isDragging = false;
+  launcher.style.cursor = "default";
+});
+</script>
 
 </body>
 </html>
