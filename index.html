@@ -1,1 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>✦ Pulse Launcher ✦</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
+    body {
+      background: transparent;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      user-select: none;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .launcher {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 420px;
+      padding: 30px 35px 35px;
+
+      background: rgba(10,10,30,.75);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+
+      border: 2px solid rgba(0,212,255,.3);
+      border-radius: 50px;
+      box-shadow: 0 0 60px rgba(0,212,255,.15);
+
+      animation: floatGlow 4s ease-in-out infinite;
+      pointer-events: auto;
+    }
+
+    .title{
+      text-align:center;
+      font-size:30px;
+      font-weight:900;
+      letter-spacing:2px;
+      margin-bottom:20px;
+
+      background:linear-gradient(135deg,#00d4ff,#a855f7,#00d4ff);
+      background-size:200% 200%;
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      animation:gradientMove 4s ease infinite;
+    }
+
+    .subtitle{
+      text-align:center;
+      color:rgba(255,255,255,.3);
+      font-size:13px;
+      letter-spacing:3px;
+      margin-bottom:20px;
+      text-transform:uppercase;
+    }
+
+    .game-list{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .game-btn{
+      display:flex;
+      align-items:center;
+      padding:14px 22px;
+      border-radius:30px;
+
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.06);
+
+      color:#fff;
+      text-decoration:none;
+
+      transition:.3s;
+      pointer-events:auto;
+    }
+
+    .game-btn:hover{
+      background:rgba(0,212,255,.1);
+      border-color:rgba(0,212,255,.3);
+      transform:scale(1.02);
+      box-shadow:0 0 30px rgba(0,212,255,.1);
+    }
+
+    .game-btn:active{
+      transform:scale(.97);
+    }
+
+    .game-icon{
+      font-size:32px;
+      margin-right:18px;
+      min-width:45px;
+      text-align:center;
+    }
+
+    .game-info{
+      flex:1;
+    }
+
+    .game-name{
+      font-size:18px;
+      font-weight:700;
+    }
+
+    .game-desc{
+      margin-top:2px;
+      font-size:13px;
+      color:rgba(255,255,255,.4);
+    }
+
+    .game-status{
+      padding:4px 14px;
+      border-radius:20px;
+      font-size:12px;
+      font-weight:600;
+
+      color:#4ade80;
+      background:rgba(0,255,100,.15);
+      border:1px solid rgba(0,255,100,.2);
+    }
+
+    .status-offline{
+      color:#f87171;
+      background:rgba(255,50,50,.1);
+      border-color:rgba(255,50,50,.2);
+    }
+
+    .footer{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-top:20px;
+      padding-top:15px;
+      border-top:1px solid rgba(255,255,255,.05);
+    }
+
+    .footer-text{
+      font-size:12px;
+      color:rgba(255,255,255,.2);
+    }
+
+    .close-btn{
+      padding:6px 18px;
+      border:none;
+      border-radius:20px;
+      cursor:pointer;
+
+      color:#f87171;
+      background:rgba(255,50,50,.1);
+      border:1px solid rgba(255,50,50,.2);
+
+      transition:.3s;
+      pointer-events:auto;
+    }
+
+    .close-btn:hover{
+      background:rgba(255,50,50,.2);
+    }
+
+    @keyframes floatGlow{
+      0%,100%{
+        transform:translateX(-50%) translateY(0);
+        box-shadow:0 0 40px rgba(0,212,255,.1);
+      }
+      50%{
+        transform:translateX(-50%) translateY(-5px);
+        box-shadow:0 0 70px rgba(0,212,255,.2);
+      }
+    }
+
+    @keyframes gradientMove{
+      0%{background-position:0% 50%;}
+      50%{background-position:100% 50%;}
+      100%{background-position:0% 50%;}
+    }
+
+    @media(max-width:500px){
+      .launcher{
+        width:90%;
+        padding:25px 20px;
+        border-radius:35px;
+        bottom:40px;
+      }
+
+      .title{
+        font-size:24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="launcher">
+
+  <div class="title">✦ PULSE LAUNCHER ✦</div>
+  <div class="subtitle">▼ Вибір гри ▼</div>
+
+  <div class="game-list">
+
+    <a class="game-btn"
+       href="https://www.roblox.com/games/142823291/Murder-Mystery-2"
+       target="_blank">
+
+      <span class="game-icon">🔪</span>
+
+      <div class="game-info">
+        <div class="game-name">Murder Mystery 2</div>
+        <div class="game-desc">
+          Класичний детектив • 10M+ гравців
+        </div>
+      </div>
+
+      <span class="game-status">▶ Грати</span>
+
+    </a>
+
+    <div class="game-btn" style="opacity:.5;cursor:not-allowed;">
+      <span class="game-icon">❓</span>
+
+      <div class="game-info">
+        <div class="game-name">Невідома гра</div>
+        <div class="game-desc">Скоро буде додано...</div>
+      </div>
+
+      <span class="game-status status-offline">⚡ Скоро</span>
+    </div>
+
+    <div class="game-btn" style="opacity:.5;cursor:not-allowed;">
+      <span class="game-icon">❓</span>
+
+      <div class="game-info">
+        <div class="game-name">Невідома гра</div>
+        <div class="game-desc">Скоро буде додано...</div>
+      </div>
+
+      <span class="game-status status-offline">⚡ Скоро</span>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <span class="footer-text">✦ PULSE v1.0</span>
+
+    <button class="close-btn"
+      onclick="this.closest('.launcher').style.display='none'">
+      ✕ Закрити
+    </button>
+  </div>
+
+</div>
+
+</body>
+</html>
