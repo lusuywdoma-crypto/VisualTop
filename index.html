@@ -3,6 +3,7 @@
 <head>
   <title>✦ Pulse Launcher ✦</title>
   <style>
+    /* ===== ЗАГАЛЬНІ ===== */
     * {
       margin: 0;
       padding: 0;
@@ -10,271 +11,394 @@
     }
 
     body {
-      background: transparent;
       font-family: 'Segoe UI', 'Arial', sans-serif;
-      user-select: none;
+      background: #0a0a1a;
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       overflow: hidden;
-      pointer-events: none;
+      user-select: none;
     }
 
-    /* ===== ГОЛОВНЕ ВІКНО ===== */
-    .launcher {
+    /* ===== ФОН ===== */
+    .bg {
       position: fixed;
-      bottom: 50px;
-      left: 30px;
-      width: 320px;
-      padding: 18px 22px 22px 22px;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, #0d0d2b, #000000);
+      z-index: 0;
+    }
 
-      /* ===== ОСНОВНИЙ СКЛЯНИЙ ЕФЕКТ ===== */
-      background: rgba(10, 10, 35, 0.45);
-      backdrop-filter: blur(28px) saturate(250%);
-      -webkit-backdrop-filter: blur(28px) saturate(250%);
+    .bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.03), transparent 60%),
+                  radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.03), transparent 60%);
+      animation: bgPulse 8s ease-in-out infinite alternate;
+    }
 
-      border-radius: 28px 28px 28px 28px;
-      border: 1.5px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 
-        0 30px 80px rgba(0, 0, 0, 0.5),
-        0 0 60px rgba(0, 180, 255, 0.06),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    @keyframes bgPulse {
+      0% { opacity: 0.5; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.05); }
+    }
 
-      pointer-events: auto;
-      cursor: default;
-      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      
+    /* ===== ВІКНО ===== */
+    .launcher {
       position: relative;
+      z-index: 1;
+      width: 440px;
+      max-width: 94%;
+      background: rgba(10, 10, 35, 0.55);
+      backdrop-filter: blur(32px) saturate(250%);
+      -webkit-backdrop-filter: blur(32px) saturate(250%);
+      border-radius: 40px;
+      border: 1.5px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7),
+                  0 0 80px rgba(0, 180, 255, 0.04);
+      padding: 30px 32px 32px 32px;
+      transition: all 0.4s ease;
       overflow: hidden;
     }
 
     .launcher::before {
       content: '';
       position: absolute;
-      top: -150%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.03) 30%,
-        rgba(255, 255, 255, 0.08) 45%,
-        rgba(255, 255, 255, 0.12) 50%,
-        rgba(255, 255, 255, 0.08) 55%,
-        rgba(255, 255, 255, 0.03) 70%,
-        rgba(255, 255, 255, 0) 100%
-      );
-      transform: rotate(25deg);
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), transparent 50%, rgba(255, 255, 255, 0.01));
       pointer-events: none;
-      animation: shimmer 6s ease-in-out infinite;
+      border-radius: 40px;
     }
 
     .launcher::after {
       content: '';
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 50%;
-      background: linear-gradient(to top, rgba(0,180,255,0.03), transparent);
+      top: -150%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(135deg,
+        transparent 0%,
+        rgba(255,255,255,0.02) 30%,
+        rgba(255,255,255,0.06) 45%,
+        rgba(255,255,255,0.08) 50%,
+        rgba(255,255,255,0.04) 60%,
+        transparent 70%
+      );
+      transform: rotate(25deg);
+      animation: shimmer 8s ease-in-out infinite;
       pointer-events: none;
-      border-radius: 0 0 28px 28px;
+      border-radius: 40px;
     }
 
     @keyframes shimmer {
-      0% { transform: rotate(25deg) translateX(-100%) translateY(-100%); opacity: 0; }
+      0% { transform: rotate(25deg) translateX(-120%) translateY(-120%); opacity: 0; }
       10% { opacity: 1; }
       90% { opacity: 1; }
-      100% { transform: rotate(25deg) translateX(100%) translateY(100%); opacity: 0; }
+      100% { transform: rotate(25deg) translateX(120%) translateY(120%); opacity: 0; }
     }
 
-    .launcher.hidden {
-      opacity: 0;
-      transform: scale(0.9) translateY(20px);
-      pointer-events: none;
+    /* ===== ЛОГО ===== */
+    .logo {
+      text-align: center;
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
     }
 
-    .drag-area {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      cursor: grab;
-      pointer-events: auto;
-    }
-
-    .drag-area:active { cursor: grabbing; }
-
-    .title {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-      background: linear-gradient(135deg,#00d4ff,#a855f7,#00d4ff);
+    .logo .title {
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #00d4ff, #a855f7, #00d4ff);
       background-size: 200% 200%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
       animation: gradientMove 4s ease-in-out infinite;
     }
 
-    .badge {
-      font-size: 10px;
-      padding: 2px 12px;
-      border-radius: 30px;
-      background: rgba(0,212,255,0.06);
-      border: 1px solid rgba(0,212,255,0.08);
-      color: rgba(0,212,255,0.4);
+    .logo .sub {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.15);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-top: 2px;
     }
 
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ===== ФОРМА ===== */
+    .form {
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.2);
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.02);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      outline: none;
+      backdrop-filter: blur(4px);
+    }
+
+    .form-group input:focus {
+      border-color: rgba(0, 212, 255, 0.15);
+      background: rgba(255, 255, 255, 0.03);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.03);
+    }
+
+    .form-group input::placeholder {
+      color: rgba(255, 255, 255, 0.08);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px 18px;
+      border-radius: 18px;
+      border: none;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      letter-spacing: 0.5px;
+      background: rgba(255, 255, 255, 0.02);
+      color: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.02);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(168, 85, 247, 0.08));
+      border: 1px solid rgba(0, 212, 255, 0.08);
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(168, 85, 247, 0.15));
+      border-color: rgba(0, 212, 255, 0.15);
+      color: #fff;
+      transform: scale(1.01);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.04);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.97);
+    }
+
+    .error {
+      color: #ff6b8a;
+      font-size: 13px;
+      margin-top: 8px;
+      text-align: center;
+      min-height: 20px;
+    }
+
+    /* ===== МЕНЮ ===== */
+    .menu {
+      display: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    .menu .welcome {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.2);
+      text-align: center;
+      margin-bottom: 18px;
+      letter-spacing: 0.5px;
+    }
+
+    .menu .welcome strong {
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 700;
+    }
+
+    /* ===== ТОГЛЕР ===== */
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 18px;
+      margin-bottom: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .toggle {
+      width: 48px;
+      height: 26px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .toggle .knob {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.04);
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .toggle.active .knob {
+      left: 24px;
+      background: rgba(0, 212, 255, 0.6);
+    }
+
+    /* ===== ІГРИ ===== */
     .game-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      margin-top: 12px;
+      gap: 10px;
     }
 
     .game-btn {
       display: flex;
       align-items: center;
-      padding: 10px 16px;
+      padding: 14px 20px;
+      border-radius: 22px;
       background: rgba(255,255,255,0.02);
       border: 1px solid rgba(255,255,255,0.03);
-      border-radius: 18px;
+      color: #fff;
       text-decoration: none;
-      color: white;
-      transition: .3s;
-      pointer-events: auto;
     }
 
-    .game-btn:hover {
-      background: rgba(0,180,255,0.04);
-      transform: translateX(4px) scale(1.01);
-    }
-
-    .game-icon {
-      font-size: 24px;
-      margin-right: 14px;
-      min-width: 36px;
-      text-align: center;
-    }
-
-    .game-name { font-size: 15px; font-weight: 700; }
-    .game-desc { font-size: 11px; color: rgba(255,255,255,0.2); }
+    .game-icon { margin-right: 16px; }
 
     .game-status {
-      font-size: 11px;
-      padding: 3px 14px;
-      border-radius: 30px;
-      background: rgba(0,255,100,0.04);
-      color: rgba(74,222,128,0.5);
+      margin-left: auto;
+      font-size: 12px;
+      color: #4ade80;
     }
 
-    .status-offline {
-      background: rgba(255,50,50,0.03);
+    .logout-btn {
+      margin-top: 18px;
+      width: 100%;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255,50,50,0.02);
       color: rgba(255,100,100,0.3);
-    }
-
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 14px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(255,255,255,0.02);
-    }
-
-    .footer-text {
-      font-size: 10px;
-      color: rgba(255,255,255,0.06);
-    }
-
-    .close-btn {
-      padding: 4px 16px;
-      border-radius: 30px;
-      border: 1px solid rgba(255,50,50,0.04);
-      background: rgba(255,50,50,0.03);
-      color: rgba(255,100,100,0.3);
-      cursor: pointer;
-    }
-
-    @keyframes gradientMove {
-      0% {background-position:0% 50%;}
-      50% {background-position:100% 50%;}
-      100% {background-position:0% 50%;}
+      border: 1px solid rgba(255,50,50,0.02);
     }
   </style>
 </head>
 
 <body>
+<div class="bg"></div>
 
 <div class="launcher" id="launcher">
-
-  <div class="drag-area" id="dragHandle">
-    <span class="title">✦ PULSE</span>
-    <span class="badge">v2.0</span>
+  <div class="logo">
+    <div class="title">✦ PULSE</div>
+    <div class="sub">Launcher • v3.0</div>
   </div>
 
-  <div class="game-list">
-    <a class="game-btn" href="https://www.roblox.com/games/142823291/Murder-Mystery-2" target="_blank">
-      <span class="game-icon">🔪</span>
-      <div class="game-info">
-        <div class="game-name">Murder Mystery 2</div>
-        <div class="game-desc">Детектив • 10M+ гравців</div>
-      </div>
-      <span class="game-status">▶ Грати</span>
-    </a>
-
-    <div class="game-btn" style="opacity:0.4;cursor:not-allowed;">
-      <span class="game-icon">❓</span>
-      <div class="game-info">
-        <div class="game-name">Невідома гра</div>
-        <div class="game-desc">Скоро буде додано...</div>
-      </div>
-      <span class="game-status status-offline">⚡ Скоро</span>
+  <div class="form" id="authForm">
+    <div class="form-group">
+      <label>Username</label>
+      <input id="username" />
     </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input id="password" type="password" />
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-primary" id="loginBtn">Login</button>
+      <button class="btn btn-primary" id="registerBtn">Register</button>
+    </div>
+
+    <div class="error" id="errorMsg"></div>
   </div>
 
-  <div class="footer">
-    <span class="footer-text">✦ LAUNCHER</span>
-    <button class="close-btn" onclick="document.getElementById('launcher').style.display='none'">✕ Закрити</button>
-  </div>
+  <div class="menu" id="menu">
+    <div class="welcome">Welcome <strong id="userDisplay"></strong></div>
 
+    <div class="toggle-row">
+      <span>PulseMarker</span>
+      <div class="toggle" id="markerToggle"><div class="knob"></div></div>
+    </div>
+
+    <div class="game-list">
+      <a class="game-btn" href="https://www.roblox.com/games/142823291/Murder-Mystery-2" target="_blank">
+        <span class="game-icon">🔪</span>
+        <span>Murder Mystery 2</span>
+        <span class="game-status">Play</span>
+      </a>
+    </div>
+
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+  </div>
 </div>
 
 <script>
-let launcher = document.getElementById('launcher');
-let dragHandle = document.getElementById('dragHandle');
+  const authForm = document.getElementById('authForm');
+  const menu = document.getElementById('menu');
+  const loginBtn = document.getElementById('loginBtn');
+  const registerBtn = document.getElementById('registerBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const username = document.getElementById('username');
+  const password = document.getElementById('password');
+  const userDisplay = document.getElementById('userDisplay');
+  const errorMsg = document.getElementById('errorMsg');
+  const markerToggle = document.getElementById('markerToggle');
 
-let isDragging = false;
-let offsetX = 0;
-let offsetY = 0;
-
-function toggleLauncher(){
-  launcher.classList.toggle('hidden');
-}
-
-document.addEventListener('keydown', (e) => {
-  if (e.code === 'ShiftRight') {
-    e.preventDefault();
-    toggleLauncher();
+  function showMenu(name) {
+    authForm.style.display = 'none';
+    menu.style.display = 'block';
+    userDisplay.textContent = name;
   }
-});
 
-dragHandle.addEventListener('mousedown', (e) => {
-  isDragging = true;
-  const rect = launcher.getBoundingClientRect();
-  offsetX = e.clientX - rect.left;
-  offsetY = e.clientY - rect.top;
-});
+  function logout() {
+    authForm.style.display = 'block';
+    menu.style.display = 'none';
+  }
 
-document.addEventListener('mousemove', (e) => {
-  if (!isDragging) return;
-  launcher.style.left = (e.clientX - offsetX) + 'px';
-  launcher.style.top = (e.clientY - offsetY) + 'px';
-  launcher.style.bottom = 'auto';
-  launcher.style.transform = 'none';
-});
+  loginBtn.onclick = () => showMenu(username.value);
+  registerBtn.onclick = () => showMenu(username.value);
+  logoutBtn.onclick = logout;
 
-document.addEventListener('mouseup', () => {
-  isDragging = false;
-});
+  let marker = false;
+  markerToggle.onclick = () => {
+    marker = !marker;
+    markerToggle.classList.toggle('active', marker);
+  };
 </script>
 
 </body>
